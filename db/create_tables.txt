@@ -1,0 +1,26 @@
+delimiter $$
+
+CREATE TABLE `users` (
+  `USER_ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `USERNAME` varchar(45) NOT NULL,
+  `PASSWORD` varchar(512) NOT NULL,
+  `ENABLED` tinyint(1) NOT NULL,
+  `SALT` varchar(128) NOT NULL,
+  `email` varchar(45) DEFAULT NULL,
+  `name` varchar(1024) DEFAULT NULL,
+  `when_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`USER_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8$$
+
+CREATE TABLE `user_roles` (
+  `USER_ROLE_ID` int(10) unsigned NOT NULL,
+  `USER_ID` int(10) unsigned NOT NULL,
+  `AUTHORITY` varchar(45) NOT NULL,
+  PRIMARY KEY (`USER_ROLE_ID`),
+  KEY `FK_user_roles` (`USER_ID`),
+  CONSTRAINT `FK_user_roles` FOREIGN KEY (`USER_ID`) REFERENCES `users` (`USER_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
+
+insert into users (username,password,enabled,salt,email,name) values ('test',SHA2('test{testsalt}',512),true,'testsalt','test@zachzimm.com','Test account')$$
+
+insert into user_roles (user_role_id,user_id,authority) values (1,1,'ROLE_USER')$$
